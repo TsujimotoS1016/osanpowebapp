@@ -1,0 +1,335 @@
+:root {
+    --sky-top: #4facfe;
+    --sky-bottom: #00f2fe;
+    --grass-top: #6DD5FA;
+    --grass-bottom: #2980B9;
+    --grass-light: #7befb2;
+    --grass-dark: #38ef7d;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --text-main: #333333;
+    --text-sub: #666666;
+    --accent-color: #ff758c;
+    --accent-hover: #ff7eb3;
+    --btn-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* App-like feel, no scrolling */
+    font-family: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+    color: var(--text-main);
+    background-color: #ffffff;
+    /* 上下の枠外を白で統一 */
+}
+
+/* Background Layers */
+.sky-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-bottom) 60%, #e0f7fa 100%);
+    z-index: 1;
+}
+
+.grass-foreground {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 25vh;
+    background: linear-gradient(to bottom, var(--grass-light) 0%, var(--grass-dark) 100%);
+    border-radius: 40% 40% 0 0 / 20px 20px 0 0;
+    z-index: 2;
+    box-shadow: 0 -10px 30px rgba(56, 239, 125, 0.3);
+}
+
+/* Clouds Animation */
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.8;
+    filter: blur(2px);
+    animation: drift linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud-1 {
+    width: 100px;
+    height: 30px;
+    top: 10%;
+    left: -120px;
+    animation-duration: 35s;
+}
+
+.cloud-1::before {
+    width: 50px;
+    height: 50px;
+    top: -20px;
+    left: 15px;
+}
+
+.cloud-1::after {
+    width: 40px;
+    height: 40px;
+    top: -10px;
+    right: 15px;
+}
+
+.cloud-2 {
+    width: 150px;
+    height: 40px;
+    top: 25%;
+    left: -180px;
+    animation-duration: 45s;
+    animation-delay: -15s;
+    opacity: 0.6;
+    transform: scale(0.8);
+}
+
+.cloud-2::before {
+    width: 70px;
+    height: 70px;
+    top: -30px;
+    left: 20px;
+}
+
+.cloud-2::after {
+    width: 60px;
+    height: 60px;
+    top: -20px;
+    right: 20px;
+}
+
+.cloud-3 {
+    width: 80px;
+    height: 25px;
+    top: 15%;
+    left: -100px;
+    animation-duration: 25s;
+    animation-delay: -5s;
+    opacity: 0.9;
+    transform: scale(0.6);
+}
+
+.cloud-3::before {
+    width: 40px;
+    height: 40px;
+    top: -15px;
+    left: 10px;
+}
+
+.cloud-3::after {
+    width: 30px;
+    height: 30px;
+    top: -10px;
+    right: 10px;
+}
+
+@keyframes drift {
+    from {
+        transform: translateX(-150px);
+    }
+
+    to {
+        transform: translateX(110vw);
+    }
+}
+
+/* App Container */
+.app-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* 画面の高さ(vh)と幅(vw)に対する割合で余白を設定 */
+    padding: calc(2vh + env(safe-area-inset-top, 0px)) 5vw calc(4vh + env(safe-area-inset-bottom, 0px)) 5vw;
+    z-index: 10;
+}
+
+header {
+    text-align: center;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+h1 {
+    /* 端末の幅に合わせて文字サイズを自動調整 (最小2rem 〜 最大3.5rem) */
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+    font-weight: 800;
+    color: white;
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    letter-spacing: 2px;
+    margin-bottom: 1vh;
+}
+
+header p {
+    color: white;
+    font-weight: 700;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Cards */
+.generator-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3vh;
+    /* 固定値ではなく、画面の高さに合わせた間隔 */
+    margin: 2vh 0;
+}
+
+.result-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.result-card:active {
+    transform: scale(0.98);
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--sky-top);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.roulette-window {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.result-text {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+    transition: filter 0.1s;
+}
+
+.roulette-active .result-text {
+    filter: blur(1.5px);
+    color: var(--text-sub);
+}
+
+.roulette-stop .result-card {
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-color: var(--grass-light);
+}
+
+.roulette-stop .result-text {
+    color: var(--sky-bottom);
+}
+
+/* Button */
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+.btn {
+    width: 100%;
+    max-width: 350px;
+    padding: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: inherit;
+    color: white;
+    cursor: pointer;
+    box-shadow: var(--btn-shadow);
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+}
+
+.start-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 10px rgba(255, 117, 140, 0.4);
+}
+
+.stop-btn {
+    background: linear-gradient(135deg, #ffb199, #ff0844);
+    box-shadow: 0 8px 20px rgba(255, 8, 68, 0.4);
+}
+
+.stop-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 10px rgba(255, 8, 68, 0.4);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* PC向けレイアウトを削除し、モバイル専用に特化 */
