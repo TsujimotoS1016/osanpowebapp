@@ -231,7 +231,7 @@ header p {
 }
 
 .roulette-window {
-    height: 5.5rem; /* 2行になっても欠けないように、かつルーレット中にガタガタしないように高さを固定 */
+    height: 8.5rem; /* 3行になっても欠けないように高さを調整 */
     display: flex;
     align-items: center;
     justify-content: center;
