@@ -144,7 +144,6 @@ const missionList = [
     "石を蹴りながら、その石が止まるまで歩く",
     "目を閉じて3歩だけ歩いてみる",
     "雲の動きと同じスピードで歩いてみる",
-    "つま先立ちで10歩だけ歩く",
     "自販機の下に落ちている小銭を探すふりをする",
     "息を止めて歩道橋の階段を登り切る",
     "足の裏にかかる体重の移動だけに集中する",
@@ -280,13 +279,13 @@ let currentView = 'normal';
 // Show share button when roulette stops
 function updateShareButton() {
     if (missionText.textContent !== '？？？') {
-        shareBtn.style.display = 'block';
+        shareBtn.style.display = 'flex';
     }
 }
 
 // Ensure it's called in stopRoulette
 const originalStopRoulette = stopRoulette;
-stopRoulette = function() {
+stopRoulette = function () {
     originalStopRoulette();
     setTimeout(updateShareButton, 60); // After the text updates
 };
@@ -296,7 +295,7 @@ shareBtn.addEventListener('click', async () => {
     shareModal.classList.remove('hidden');
     previewImg.style.display = 'none';
     spinner.style.display = 'block';
-    
+
     // Reset state
     normalImageUrl = '';
     transparentImageUrl = '';
@@ -355,7 +354,7 @@ tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         tabBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        
+
         currentView = btn.dataset.type;
         if (currentView === 'normal') {
             previewImg.src = normalImageUrl;
@@ -369,7 +368,7 @@ tabBtns.forEach(btn => {
 downloadBtn.addEventListener('click', () => {
     const url = currentView === 'normal' ? normalImageUrl : transparentImageUrl;
     if (!url) return;
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = 'osanpo_mission_' + Date.now() + '.png';

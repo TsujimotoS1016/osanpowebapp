@@ -264,7 +264,9 @@ header p {
 /* Button */
 .controls {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Adds space between buttons */
     margin-top: 2vh;
 }
 
@@ -337,7 +339,6 @@ header p {
 .share-btn {
     background: linear-gradient(145deg, #ffffff, #f0f0f0);
     color: #555;
-    margin-top: 15px;
     font-size: 1.1rem;
     padding: 12px 30px;
     border-radius: 30px;
