@@ -16,7 +16,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Noto+Sans+JP:wght@400;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="style.css?v=27">
 </head>
 
 <body>
@@ -45,11 +45,61 @@
             <button id="action-btn" class="btn start-btn">
                 <span class="btn-text">スタート！</span>
             </button>
+            <button id="share-btn" class="btn share-btn" style="display: none;">
+                <span class="btn-text">画像を保存</span>
+            </button>
         </div>
     </div>
 
     <div class="grass-foreground"></div>
 
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close">&times;</button>
+            <h2>画像を保存</h2>
+            
+            <div class="preview-tabs">
+                <button class="tab-btn active" data-type="normal">通常背景</button>
+                <button class="tab-btn" data-type="transparent">透明背景</button>
+            </div>
+            
+            <div class="preview-area checkerboard" id="preview-area">
+                <img id="preview-img" src="" alt="プレビュー画像">
+                <div id="loading-spinner" class="spinner">画像を生成中...</div>
+            </div>
+            
+            <div class="modal-actions">
+                <button id="download-btn" class="btn download-btn">ダウンロード</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Capture Container (Must not be display:none for html2canvas) -->
+    <div id="capture-wrapper" class="capture-wrapper">
+        <div id="capture-container" class="capture-container">
+            <div class="capture-bg-layer" id="capture-bg-layer"></div>
+            
+            <header class="capture-header">
+                <h1 style="color: #333; text-shadow: none !important;">神のお告げ</h1>
+                <p style="color: #555; text-shadow: none !important;">〜今日のお告げ〜</p>
+            </header>
+
+            <main class="generator-area capture-main">
+                <div class="result-card" id="capture-card">
+                    <span class="label">どこでなにをする</span>
+                    <div class="roulette-window">
+                        <span id="capture-mission-text" class="result-text">？？？</span>
+                    </div>
+                </div>
+            </main>
+            
+            <div class="capture-grass" id="capture-grass"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
 </body>
 

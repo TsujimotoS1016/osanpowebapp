@@ -333,3 +333,282 @@ header p {
 }
 
 /* PC向けレイアウトを削除し、モバイル専用に特化 */
+/* === Share Button === */
+.share-btn {
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    color: #555;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.share-btn:active {
+    transform: translateY(1px);
+}
+
+/* === Modal === */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 20px;
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-content h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.preview-tabs {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #777;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: #fff;
+    color: #FF9A9E;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    margin: 2px;
+}
+
+.preview-area {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #f8f8f8;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.checkerboard {
+    background-image: 
+      linear-gradient(45deg, #e0e0e0 25%, transparent 25%), 
+      linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, #e0e0e0 75%), 
+      linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+#preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
+}
+
+.spinner {
+    color: #888;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.download-btn {
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+    color: white;
+}
+
+/* === Capture Container (Offscreen) === */
+.capture-wrapper {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+}
+
+.capture-container {
+    width: 600px;
+    height: 600px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    overflow: hidden;
+    padding-top: 50px;
+    box-sizing: border-box;
+}
+
+.capture-bg-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+    z-index: 1;
+    display: none;
+}
+.capture-grass {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 20%;
+    background: #90EE90;
+    z-index: 2;
+    display: none;
+}
+.capture-grass::before {
+    content: '';
+    position: absolute;
+    top: -15px; left: 0; width: 100%; height: 30px;
+    background: linear-gradient(180deg, transparent 0%, #90EE90 100%);
+    border-radius: 50% 50% 0 0;
+}
+
+.capture-header {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    margin-bottom: 30px;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+.capture-header h1 {
+    font-size: 3rem;
+    color: #333 !important;
+    margin: 0;
+    font-weight: 800;
+    text-shadow: none !important;
+}
+.capture-header p {
+    font-size: 1.2rem;
+    color: #555 !important;
+    margin: 5px 0 0 0;
+    font-weight: bold;
+    text-shadow: none !important;
+}
+
+.capture-main {
+    position: relative;
+    z-index: 3;
+    width: 90%;
+    max-width: 500px;
+}
+
+.capture-container .result-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.capture-container .label {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--sky-top);
+    margin-bottom: 1rem;
+}
+
+.capture-container .roulette-window {
+    padding: 30px 20px;
+    width: 90%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.capture-container .result-text {
+    font-size: 2.2rem;
+    color: #333;
+    font-weight: 700;
+    line-height: 1.5;
+    word-break: auto-phrase;
+}
+
+/* === Transparent Mode Overrides === */
+.transparent-mode .capture-header h1,
+.transparent-mode .capture-header p {
+    color: white !important;
+}
+
+.transparent-mode .result-card {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 10px;
+}
+
+.transparent-mode .label,
+.transparent-mode .result-text {
+    color: white !important;
+}
+
+.transparent-mode .roulette-window {
+    background: transparent;
+}

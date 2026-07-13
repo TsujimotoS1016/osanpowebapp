@@ -258,3 +258,122 @@ actionBtn.addEventListener('click', () => {
         startRoulette();
     }
 });
+
+
+// --- Share Feature ---
+const shareBtn = document.getElementById('share-btn');
+const shareModal = document.getElementById('share-modal');
+const modalClose = document.getElementById('modal-close');
+const previewImg = document.getElementById('preview-img');
+const spinner = document.getElementById('loading-spinner');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const downloadBtn = document.getElementById('download-btn');
+
+const captureContainer = document.getElementById('capture-container');
+const captureBgLayer = document.getElementById('capture-bg-layer');
+const captureMissionText = document.getElementById('capture-mission-text');
+
+let normalImageUrl = '';
+let transparentImageUrl = '';
+let currentView = 'normal';
+
+// Show share button when roulette stops
+function updateShareButton() {
+    if (missionText.textContent !== '？？？') {
+        shareBtn.style.display = 'block';
+    }
+}
+
+// Ensure it's called in stopRoulette
+const originalStopRoulette = stopRoulette;
+stopRoulette = function() {
+    originalStopRoulette();
+    setTimeout(updateShareButton, 60); // After the text updates
+};
+
+shareBtn.addEventListener('click', async () => {
+    // Open modal
+    shareModal.classList.remove('hidden');
+    previewImg.style.display = 'none';
+    spinner.style.display = 'block';
+    
+    // Reset state
+    normalImageUrl = '';
+    transparentImageUrl = '';
+    currentView = 'normal';
+    tabBtns[0].classList.add('active');
+    tabBtns[1].classList.remove('active');
+
+    // Update text in capture container
+    captureMissionText.innerHTML = missionText.innerHTML;
+
+    // We must wait a tiny bit for DOM to update
+    await new Promise(r => setTimeout(r, 50));
+
+    try {
+        // 1. Generate Normal Image
+        captureBgLayer.style.display = 'block';
+        const canvasNormal = await html2canvas(captureContainer, {
+            scale: 2,
+            backgroundColor: null
+        });
+        normalImageUrl = canvasNormal.toDataURL('image/png');
+
+        // 2. Generate Transparent Image
+        captureBgLayer.style.display = 'none';
+        captureContainer.classList.add('transparent-mode');
+        const canvasTransparent = await html2canvas(captureContainer, {
+            scale: 2,
+            backgroundColor: null
+        });
+        transparentImageUrl = canvasTransparent.toDataURL('image/png');
+        captureContainer.classList.remove('transparent-mode');
+
+        // Show preview
+        previewImg.src = normalImageUrl;
+        previewImg.style.display = 'block';
+        spinner.style.display = 'none';
+
+    } catch (e) {
+        console.error('Image generation failed', e);
+        spinner.textContent = '画像の生成に失敗しました';
+    }
+});
+
+// Close modal
+modalClose.addEventListener('click', () => {
+    shareModal.classList.add('hidden');
+});
+shareModal.addEventListener('click', (e) => {
+    if (e.target === shareModal) {
+        shareModal.classList.add('hidden');
+    }
+});
+
+// Tab switching
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        currentView = btn.dataset.type;
+        if (currentView === 'normal') {
+            previewImg.src = normalImageUrl;
+        } else {
+            previewImg.src = transparentImageUrl;
+        }
+    });
+});
+
+// Download
+downloadBtn.addEventListener('click', () => {
+    const url = currentView === 'normal' ? normalImageUrl : transparentImageUrl;
+    if (!url) return;
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'osanpo_mission_' + Date.now() + '.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
